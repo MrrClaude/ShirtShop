@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'ckeditor',
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,6 +41,22 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
 ]
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'all',
+        'skin':'moono',
+        'codeSnippet_theme':'monokai',
+        'extraPlugins':','.join(
+            [
+                'codesnippet',
+                'widget',
+                'dialog'
+            ]
+        )
+    },
+}
 
 JAZZMIN_SETTINGS = {
     "site_title": "My Project Admin",

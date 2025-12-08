@@ -1,8 +1,13 @@
 from django.shortcuts import render
+from .models import *
 from django.http import HttpResponse
 # Create your views here.
 def indexSport(request):
-    return render(request, "sports/index.html")
+    DTProduct= Product.objects.all()
+    context={
+        'ObjDTProduct':DTProduct
+    }
+    return render(request, "sports/index.html",context)
 def aboutSport(request):
     return render(request, "sports/about.html")
 def cartSport(request):
@@ -14,9 +19,20 @@ def blogSport(request):
 def blogsingleSport(request):
     return render(request, "sports/blog-single.html")
 def shopSport(request):
-    return render(request, "sports/shop.html")
-def productsingleSport(request):
-    return render(request, "sports/product-single.html")
+    DTProduct= Product.objects.all()
+    context={
+        'ObjDTProduct':DTProduct
+    }
+    return render(request, "sports/shop.html",context)
+def productsingleSport(request, pk):
+    DTProductDetail = Product.objects.get(id=pk)
+    DTProductDetailInfo = ProductDetail.objects.get(productID=pk)
+
+    context = {
+        'ObjProductDetail': DTProductDetail,
+        'ObjDTProductDetailInfo': DTProductDetailInfo,
+    }
+
+    return render(request, "sports/product-single.html", context)
 def checkoutSport(request):
     return render(request, "sports/checkout.html")
-    return render(request, "sports/service.html")
