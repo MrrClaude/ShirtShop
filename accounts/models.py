@@ -34,7 +34,7 @@ class Image(models.Model):
 class Product(models.Model):
     productName = models.CharField(max_length=200, null=True)
     categoryID = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
-    price = models.CharField(max_length=200, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     productDescript =  RichTextUploadingField(null=True)
     weight = models.CharField(max_length=200, null=True)
     availability = models.CharField(max_length=200, null=True)
@@ -61,3 +61,38 @@ class ProductDetailImage(models.Model):
     imageDate = models.DateTimeField(auto_now_add=True, null=True)
     def __str__(self):         
         return f'{self.id} - {self.productDetailImageName}-{self.productID.productName}'
+    
+class HomeSlider(models.Model):
+    title = models.CharField(max_length=255)
+    subtitle = models.CharField(max_length=255, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    button_text = models.CharField(max_length=50, default="Discover Now")
+    button_link = models.CharField(max_length=255, default="#")
+
+    image = models.ImageField(upload_to="slider/")  # background or main image
+
+    def __str__(self):
+        return self.title
+    
+from django.db import models
+
+class DealOfTheMonth(models.Model):
+    title = models.CharField(max_length=255, default="Deal of the Month")
+    subtitle = models.CharField(max_length=255, blank=True, null=True)
+    main_product_name = models.CharField(max_length=255)
+    original_price = models.DecimalField(max_digits=10, decimal_places=2)
+    sale_price = models.DecimalField(max_digits=10, decimal_places=2)
+    main_image = models.ImageField(upload_to="deals/")
+    thumbnail_images = models.ManyToManyField('DealThumbnail', blank=True)
+    timer_end = models.DateTimeField(blank=True, null=True)  # optional for countdown
+
+    def __str__(self):
+        return self.main_product_name
+
+
+class DealThumbnail(models.Model):
+    image = models.ImageField(upload_to="deal_thumbnails/")
+
+    def __str__(self):
+        return self.image.name
+

@@ -17,27 +17,27 @@
     	</div>
     	<div class="container">
     		<div class="row">
-			</div>
-			{% for ObjDTProduct in ObjDTProduct %}
-			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
-				<div class="product d-flex flex-column">
-					<a href="#" class="img-prod"><img class="img-fluid" src="{% static ObjDTProduct.productImage %}" alt="Colorlib Template">
-						<div class="overlay"></div>
-					</a>
-					<div class="text py-3 pb-4 px-3">
-						<div class="d-flex">
-							<div class="cat">
-								<span>{{ObjDTProduct.categoryID}}</span>
-							</div>
-							<div class="rating">
-								<p class="text-right mb-0">
-									<a href="#"><span class="ion-ios-star-outline"></span></a>
-									<a href="#"><span class="ion-ios-star-outline"></span></a>
-									<a href="#"><span class="ion-ios-star-outline"></span></a>
-									<a href="#"><span class="ion-ios-star-outline"></span></a>
-									<a href="#"><span class="ion-ios-star-outline"></span></a>
-								</p>
-							</div>
+				{% for ObjDTProduct in ObjDTProduct %}
+    			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
+    				<div class="product d-flex flex-column">
+    					<a href="#" class="img-prod"><img class="img-fluid" src="{% static ObjDTProduct.productImage %}" alt="Colorlib Template">
+    						<div class="overlay"></div>
+    					</a>
+    					<div class="text py-3 pb-4 px-3">
+    						<div class="d-flex">
+    							<div class="cat">
+		    						<span>{{ObjDTProduct.categoryID}}</span>
+		    					</div>
+		    					<div class="rating">
+	    							<p class="text-right mb-0">
+	    								<a href="#"><span class="ion-ios-star-outline"></span></a>
+	    								<a href="#"><span class="ion-ios-star-outline"></span></a>
+	    								<a href="#"><span class="ion-ios-star-outline"></span></a>
+	    								<a href="#"><span class="ion-ios-star-outline"></span></a>
+	    								<a href="#"><span class="ion-ios-star-outline"></span></a>
+	    							</p>
+	    						</div>
+	    					</div>
     						<h3><a href="#">{{ ObjDTProduct.productName }}</a></h3>
     						<div class="pricing">
 	    						<p class="price"><span>${{ ObjDTProduct.price}}.00</span></p>
