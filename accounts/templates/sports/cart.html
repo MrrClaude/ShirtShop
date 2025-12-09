@@ -1,163 +1,182 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-   {% include 'sports/cssStyle.html' %}
-  </head>
-  <body class="goto-here">
-		<div class="py-1 bg-black">
-    	<div class="container">
-    		<div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
-	    		<div class="col-lg-12 d-block">
-		    		<div class="row d-flex">
-		    			<div class="col-md pr-4 d-flex topper align-items-center">
-					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
-						    <span class="text">+ 1235 2355 98</span>
-					    </div>
-					    <div class="col-md pr-4 d-flex topper align-items-center">
-					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
-						    <span class="text">youremail@email.com</span>
-					    </div>
-					    <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
-						    <span class="text">3-5 Business days delivery &amp; Free Returns</span>
-					    </div>
-				    </div>
-			    </div>
-		    </div>
-		  </div>
-    </div>
-    {% include 'sports/menu.html' %}
-    <!-- END nav -->
+<head>
+    {% include 'sports/cssStyle.html' %}
+</head>
+<body class="goto-here">
 
-    <div class="hero-wrap hero-bread" style="background-image: url('images/bg_6.jpg');">
-      <div class="container">
+{% include 'sports/menu.html' %}
+
+<div class="hero-wrap hero-bread" style="background-image: url('images/bg_6.jpg');">
+    <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
-          <div class="col-md-9 ftco-animate text-center">
-          	<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Cart</span></p>
-            <h1 class="mb-0 bread">My Wishlist</h1>
-          </div>
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'indexSport' %}">Home</a></span> <span>Cart</span></p>
+                <h1 class="mb-0 bread">My Wishlist</h1>
+            </div>
         </div>
-      </div>
     </div>
+</div>
 
-    <section class="ftco-section ftco-cart">
-			<div class="container">
-				<div class="row">
-    			<div class="col-md-12 ftco-animate">
-    				<div class="cart-list">
-	    				<table class="table">
-						    <thead class="thead-primary">
-						      <tr class="text-center">
-						        <th>&nbsp;</th>
-						        <th>&nbsp;</th>
-						        <th>Product</th>
-						        <th>Price</th>
-						        <th>Quantity</th>
-						        <th>Total</th>
-						      </tr>
-						    </thead>
-						    <tbody>
-								{% for id, item in cart.items %}
-						      <tr class="text-center">
-						        <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
-						        
-						        <td class="image-prod"><div class="img" style="background-image:url('{% static item.image %}');"></div></td>
-						        
-						        <td class="product-name">
-						        	<h3>{{ item.productName }}</h3>
-						        	{% comment %} <p>Far far away, behind the word mountains, far from the countries</p> {% endcomment %}
-						        </td>
-						        
-						        <td class="price">{{ item.price }}</td>
-						        
-						        <td class="quantity">
-						        	<div class="input-group mb-3">
-					             	<input type="text" name="quantity" class="quantity form-control input-number" value="{{ item.quantity }}">
-					          	</div>
-					          </td>
-						        
-						        <td class="total">${{item.price}}.00</td>
-						      </tr><!-- END TR-->
-							  {% endfor %}
-						    </tbody>
-						  </table>
-					  </div>
-    			</div>
-    		</div>
-    		<div class="row justify-content-start">
-    			<div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate">
-    				<div class="cart-total mb-3">
-    					<h3>Cart Totals</h3>
-    					<p class="d-flex">
-    						<span>Subtotal</span>
-    						<span>${{total_price}}</span>
-    					</p>
-    					<p class="d-flex">
-    						<span>Delivery</span>
-    						<span>$0.00</span>
-    					</p>
-    					<p class="d-flex">
-    						<span>Discount</span>
-    						<span>$3.00</span>
-    					</p>
-    					<hr>
-    					<p class="d-flex total-price">
-    						<span>Total</span>
-    						<span>${{total_price}}</span>
-    					</p>
-    				</div>
-    				<p class="text-center"><a href="{% url 'checkoutSport'%}" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
-    			</div>
-    		</div>
-			</div>
-		</section>
-		
-
-    {% include 'sports/footer.html' %}
-  
-
-  <!-- loader -->
-  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+<section class="ftco-section ftco-cart">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 ftco-animate">
+                <div class="cart-list">
+                    <table class="table">
+                        <thead class="thead-primary">
+                        <tr class="text-center">
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th>Product</th>
+							<th>Size</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for id, item in cart.items %}
+                        <tr class="text-center cart-row" data-id="{{ id }}">
+                            <td class="product-remove">
+    <a href="{% url 'remove_from_cart' id %}">
+        <span class="ion-ios-close"></span>
+    </a>
+</td>
 
 
- {% include 'sports/js.html' %}  
+                            <td class="image-prod"><div class="img" style="background-image:url('{% static item.image %}');"></div></td>
 
-  <script>
-		$(document).ready(function(){
+                            <td class="product-name">
+                                <h3>{{ item.productName }}</h3>
+                            </td>
+							<td class="product-size">{{ item.size }}</td>
+                            <td class="price item-price" data-price="{{ item.price }}">{{ item.price }}</td>
 
-		var quantitiy=0;
-		   $('.quantity-right-plus').click(function(e){
-		        
-		        // Stop acting like a button
-		        e.preventDefault();
-		        // Get the field name
-		        var quantity = parseInt($('#quantity').val());
-		        
-		        // If is not undefined
-		            
-		            $('#quantity').val(quantity + 1);
+                            <td class="quantity">
+                                <div class="input-group mb-3 d-flex align-items-center justify-content-center">
+                                    <button type="button" class="quantity-left-minus btn btn-outline-secondary">
+                                        <i class="ion-ios-remove"></i>
+                                    </button>
 
-		          
-		            // Increment
-		        
-		    });
+                                    <input type="text" class="quantity-input form-control text-center mx-2"
+                                           value="{{ item.quantity }}" style="max-width: 60px;">
 
-		     $('.quantity-left-minus').click(function(e){
-		        // Stop acting like a button
-		        e.preventDefault();
-		        // Get the field name
-		        var quantity = parseInt($('#quantity').val());
-		        
-		        // If is not undefined
-		      
-		            // Increment
-		            if(quantity>0){
-		            $('#quantity').val(quantity - 1);
-		            }
-		    });
-		    
-		});
-	</script>
-    
-  </body>
+                                    <button type="button" class="quantity-right-plus btn btn-outline-secondary">
+                                        <i class="ion-ios-add"></i>
+                                    </button>
+                                </div>
+                            </td>
+
+                            <td class="total item-total">${{ item.total|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-start">
+            <div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate">
+                <div class="cart-total mb-3">
+                    <h3>Cart Totals</h3>
+                    <p class="d-flex">
+                        <span>Subtotal</span>
+                        <span id="cart-subtotal">${{ total_price|floatformat:2 }}</span>
+                    </p>
+                    <p class="d-flex">
+                        <span>Delivery</span>
+                        <span>$0.00</span>
+                    </p>
+                    <p class="d-flex">
+                        <span>Discount</span>
+                        <span>$0.00</span>
+                    </p>
+                    <hr>
+                    <p class="d-flex total-price">
+                        <span>Total</span>
+                        <span id="cart-total">${{ total_price|floatformat:2 }}</span>
+                    </p>
+                </div>
+                <p class="text-center"><a href="{% url 'checkoutSport' %}"
+                                           class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% include 'sports/footer.html' %}
+
+{% include 'sports/js.html' %}
+
+<script>
+function updateTotals() {
+    let grandTotal = 0;
+    $(".cart-row").each(function () {
+        let price = parseFloat($(this).find(".item-price").attr("data-price"));
+        let qty = parseInt($(this).find(".quantity-input").val());
+        if (isNaN(price)) price = 0;
+        if (isNaN(qty)) qty = 1;
+        let lineTotal = price * qty;
+        $(this).find(".item-total").text("$" + lineTotal.toFixed(2));
+        grandTotal += lineTotal;
+    });
+    $("#cart-subtotal").text("$" + grandTotal.toFixed(2));
+    $("#cart-total").text("$" + grandTotal.toFixed(2));
+}
+
+function updateCartSession(productId, qty) {
+    $.ajax({
+        url: "{% url 'update_cart_quantity' %}",
+        type: "POST",
+        data: {
+            'product_id': productId,
+            'quantity': qty,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function(response){
+            // optional: show success message
+            updateTotals();
+        }
+    });
+}
+
+$(document).ready(function () {
+    $(".quantity-right-plus").click(function () {
+        let input = $(this).closest(".input-group").find(".quantity-input");
+        let qty = parseInt(input.val()) + 1;
+        input.val(qty);
+
+        let productId = $(this).closest("tr").data("id");
+        updateCartSession(productId, qty);
+    });
+
+    $(".quantity-left-minus").click(function () {
+        let input = $(this).closest(".input-group").find(".quantity-input");
+        let qty = parseInt(input.val());
+        if (qty > 1) {
+            qty -= 1;
+            input.val(qty);
+            let productId = $(this).closest("tr").data("id");
+            updateCartSession(productId, qty);
+        }
+    });
+
+    $(".quantity-input").on("input", function () {
+        let qty = parseInt($(this).val());
+        if (isNaN(qty) || qty < 1) {
+            $(this).val(1);
+            qty = 1;
+        }
+        let productId = $(this).closest("tr").data("id");
+        updateCartSession(productId, qty);
+    });
+
+    updateTotals();
+});
+</script>
+
+</body>
 </html>

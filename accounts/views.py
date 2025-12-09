@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
 from django.db.models import Min, Max
 from .models import *
-from django.http import HttpResponse
+from django.http import HttpResponse ,JsonResponse
 # Create your views here.
 def indexSport(request):
     DTProduct= Product.objects.all()
@@ -93,10 +93,12 @@ def shopSport(request):
 def productsingleSport(request, pk):
     DTProductDetail = Product.objects.get(id=pk)
     DTProductDetailInfo = ProductDetail.objects.get(productID=pk)
+    sizes = DTProductDetail.sizes.all() 
 
     context = {
         'ObjProductDetail': DTProductDetail,
         'ObjDTProductDetailInfo': DTProductDetailInfo,
+        'sizes': sizes, 
     }
 
     return render(request, "sports/product-single.html", context)
@@ -178,28 +180,55 @@ def delete_item(request, pk):
 
 
 def add_to_cart(request, product_id):
+    selected_size_id = request.GET.get('size')  # get size from query string
+
+    product = Product.objects.get(id=product_id)
+    size_name = ''
+    if selected_size_id:
+        try:
+            size = product.sizes.get(id=selected_size_id)
+            size_name = size.name
+        except Size.DoesNotExist:
+            size_name = ''
+
+    # Create a unique key for the cart to handle same product with different sizes
+    key = f"{product_id}_{selected_size_id}" if selected_size_id else str(product_id)
+
     cart = request.session.get('cart', {})
-    
-    if str(product_id) in cart:
-        cart[str(product_id)]['quantity'] += 1
-        cart[str(product_id)]['total'] = cart[str(product_id)]['quantity'] * cart[str(product_id)]['price']
+
+    if key in cart:
+        cart[key]['quantity'] += 1
+        cart[key]['total'] = cart[key]['quantity'] * cart[key]['price']
     else:
-        product = Product.objects.get(id=product_id)
-        cart[str(product_id)] = {
+        cart[key] = {
             'productName': product.productName,
+            'size': size_name,
             'price': float(product.price),
             'quantity': 1,
-            'total': float(product.price) * 1,
+            'total': float(product.price),
             'image': product.productImage.url if product.productImage else ''
         }
 
     request.session['cart'] = cart
     return redirect('view_cart')
 
+
 def view_cart(request):
     cart = request.session.get('cart', {})
-    total_price = sum(item['price'] * item['quantity'] for item in cart.values())
-    return render(request, 'sports/cart.html', {'cart': cart, 'total_price': total_price})
+    
+    # recompute totals
+    for item in cart.values():
+        item['total'] = item['price'] * item['quantity']
+
+    total_price = sum(item['total'] for item in cart.values())
+
+    request.session['cart'] = cart
+
+    return render(request, 'sports/cart.html', {
+        'cart': cart,
+        'total_price': total_price
+    })
+
 
 def remove_from_cart(request, product_id):
     cart = request.session.get('cart', {})
@@ -214,6 +243,27 @@ def checkout_view(request):
     return render(request, 'sports/checkout.html', {
         'cart': cart,
         'total_price': total_price,
+    })
+
+def update_cart_quantity(request):
+    product_id = request.POST.get('product_id')
+    new_quantity = int(request.POST.get('quantity', 1))
+
+    cart = request.session.get('cart', {})
+
+    if product_id in cart:
+        cart[product_id]['quantity'] = new_quantity
+        cart[product_id]['total'] = new_quantity * cart[product_id]['price']
+
+    request.session['cart'] = cart
+
+    # Calculate new subtotal
+    total_price = sum(item['total'] for item in cart.values())
+
+    return JsonResponse({
+        'status': 'success',
+        'new_total': cart[product_id]['total'],
+        'cart_total': total_price
     })
 
 
