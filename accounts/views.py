@@ -91,13 +91,18 @@ def shopSport(request):
 
 
 def productsingleSport(request, pk):
-    DTProductDetail = Product.objects.get(id=pk)
-    DTProductDetailInfo = ProductDetail.objects.get(productID=pk)
-    sizes = DTProductDetail.sizes.all() 
+    # Get the product (must exist)
+    product = get_object_or_404(Product, id=pk)
+
+    # Try to get product detail, but allow missing
+    product_detail = ProductDetail.objects.filter(productID=pk).first()
+
+    # Get sizes
+    sizes = product.sizes.all() 
 
     context = {
-        'ObjProductDetail': DTProductDetail,
-        'ObjDTProductDetailInfo': DTProductDetailInfo,
+        'ObjProductDetail': product,
+        'ObjDTProductDetailInfo': product_detail,  # could be None
         'sizes': sizes, 
     }
 
@@ -180,18 +185,30 @@ def delete_item(request, pk):
 
 
 def add_to_cart(request, product_id):
-    selected_size_id = request.GET.get('size')  # get size from query string
+    # Get the selected size from query string
+    selected_size_id = request.GET.get('size')  
 
     product = Product.objects.get(id=product_id)
     size_name = ''
+
     if selected_size_id:
         try:
             size = product.sizes.get(id=selected_size_id)
             size_name = size.name
         except Size.DoesNotExist:
             size_name = ''
+    else:
+        # Default to SMALL if it exists
+        small_size = product.sizes.filter(name__iexact='SMALL').first()
+        if small_size:
+            selected_size_id = small_size.id
+            size_name = small_size.name
+        else:
+            # Fallback if no size available
+            selected_size_id = None
+            size_name = ''
 
-    # Create a unique key for the cart to handle same product with different sizes
+    # Unique key for cart to handle same product with different sizes
     key = f"{product_id}_{selected_size_id}" if selected_size_id else str(product_id)
 
     cart = request.session.get('cart', {})
@@ -211,6 +228,7 @@ def add_to_cart(request, product_id):
 
     request.session['cart'] = cart
     return redirect('view_cart')
+
 
 
 def view_cart(request):
