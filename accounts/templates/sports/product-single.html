@@ -99,7 +99,7 @@
 	          		<p style="color: #000;">{{ObjProductDetail.availability}}</p>
 	          	</div>
           	</div>
-          	<p><a href="{% url 'cartSport'%}" class="btn btn-black py-3 px-5 mr-2">Add to Cart</a><a href="{% url 'checkoutSport'%}" class="btn btn-primary py-3 px-5">Buy now</a></p>
+          	<p><a href="{% url 'add_to_cart' ObjProductDetail.id %}" class="btn btn-black py-3 px-5 mr-2">Add to Cart</a><a href="{% url 'checkoutSport'%}" class="btn btn-primary py-3 px-5">Buy now</a></p>
     			</div>
     		</div>
 

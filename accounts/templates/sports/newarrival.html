@@ -1,11 +1,5 @@
 {% load static %}
 
-{% for ObjDTProduct in ObjDTProduct %}
-	{{ObjDTProduct.id}}
-	{{ ObjDTProduct.productName }}
-	{{ ObjDTProduct.productImage }}
-	{{ ObjDTProduct.price}}
-{% endfor %}
 <section class="ftco-section bg-light">
     	<div class="container">
 				<div class="row justify-content-center mb-3 pb-3">
@@ -44,7 +38,7 @@
 	    					</div>
 	    					<p class="bottom-area d-flex px-3">
     							<a href="{% url 'productsingleSport' ObjDTProduct.id %}" class="add-to-cart text-center py-2 mr-1"><span>View More</i></span></a>
-    							<a href="{% url 'cartSport'%}" class="buy-now text-center py-2">Buy now<span><i class="ion-ios-cart ml-1"></i></span></a>
+    							<a href="{% url 'add_to_cart' ObjDTProduct.id %}" class="buy-now text-center py-2">Buy now<span><i class="ion-ios-cart ml-1"></i></span></a>
     						</p>
     					</div>
     				</div>

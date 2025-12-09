@@ -1,4 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render ,redirect
+from .forms import ItemForm ,ProductForm
+from .models import *
+from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
 from django.db.models import Min, Max
 from .models import *
@@ -99,4 +102,121 @@ def productsingleSport(request, pk):
     return render(request, "sports/product-single.html", context)
 def checkoutSport(request):
     return render(request, "sports/checkout.html")
+
+def create_book(request):
+    if request.method == "POST":
+        title = request.POST['title']
+        author = request.POST['author']
+        published_date = request.POST['published_date']
+        Book.objects.create(title=title, author=author, published_date=published_date)
+        return redirect('book_list')
+    return render(request, 'sports/create_book.html')
+
+def book_list(request):
+    books = Book.objects.all()
+    return render(request, 'sports/book_list.html', {'books': books})
+
+def update_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    if request.method == "POST":
+        book.title = request.POST['title']
+        book.author = request.POST['author']
+        book.published_date = request.POST['published_date']
+        book.save()
+        return redirect('book_list')
+    return render(request, 'sports/update_book.html', {'book': book})
+
+def delete_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    if request.method == "POST":
+        book.delete()
+        return redirect('book_list')
+    return render(request, 'sports/delete_book.html', {'book': book})
+
+def create_item(request):
+    if request.method == 'POST':
+        form = ItemForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('item_list')  # Redirect to the list view
+    else:
+        form = ItemForm()
+    return render(request, 'sports/create_item.html', {'form': form})
+
+def item_list(request):
+    items = Item.objects.all()
+    return render(request, 'sports/item_list.html', {'items': items})
+
+def create_item(request):
+    if request.method == 'POST':
+        form = ItemForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # return redirect('item_list')  # Redirect to the list view
+    else:
+        form = ItemForm()
+    return render(request, 'sports/create_item.html', {'ProductForm': form})
+
+
+def update_item(request, pk):
+    item = get_object_or_404(Item, pk=pk)
+    if request.method == 'POST':
+        form = ItemForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            return redirect('item_list')  # Redirect to the list view
+    else:
+        form = ItemForm(instance=item)
+    return render(request, 'sports/update_item.html', {'form': form, 'item': item})
+
+def delete_item(request, pk):
+    item = get_object_or_404(Item, pk=pk)
+    if request.method == 'POST':
+        item.delete()
+        return redirect('item_list')  # Redirect to the list view after deletion
+    return render(request, 'sports/delete_item.html', {'item': item})
+
+
+def add_to_cart(request, product_id):
+    cart = request.session.get('cart', {})
+    
+    if str(product_id) in cart:
+        cart[str(product_id)]['quantity'] += 1
+        cart[str(product_id)]['total'] = cart[str(product_id)]['quantity'] * cart[str(product_id)]['price']
+    else:
+        product = Product.objects.get(id=product_id)
+        cart[str(product_id)] = {
+            'productName': product.productName,
+            'price': float(product.price),
+            'quantity': 1,
+            'total': float(product.price) * 1,
+            'image': product.productImage.url if product.productImage else ''
+        }
+
+    request.session['cart'] = cart
+    return redirect('view_cart')
+
+def view_cart(request):
+    cart = request.session.get('cart', {})
+    total_price = sum(item['price'] * item['quantity'] for item in cart.values())
+    return render(request, 'sports/cart.html', {'cart': cart, 'total_price': total_price})
+
+def remove_from_cart(request, product_id):
+    cart = request.session.get('cart', {})
+    cart.pop(str(product_id), None)
+    request.session['cart'] = cart
+    return redirect('view_cart')
+
+def checkout_view(request):
+    cart = request.session.get('cart', {})
+    total_price = sum(item['total'] for item in cart.values())
+
+    return render(request, 'sports/checkout.html', {
+        'cart': cart,
+        'total_price': total_price,
+    })
+
+
+
+
 
