@@ -14,7 +14,7 @@ urlpatterns = [
     path ('contactSport/', views.contactSport, name='contactSport'),
     path ('blogSport/', views.blogSport, name='blogSport'),
     path ('productsingleSport/<int:pk>/', views.productsingleSport, name='productsingleSport'),
-    path ('checkoutSport/', views.checkoutSport, name='checkoutSport'),
+    path('checkoutSport/', views.checkoutSport, name='checkoutSport'),
     path('create/', views.create_book, name='create_book'),
     path('book_list/', views.book_list, name='book_list'),
     path('update/<int:book_id>/', views.update_book, name='update_book'),
@@ -31,7 +31,9 @@ urlpatterns = [
 
 
     path('checkout_view/', views.checkout_view, name='checkout_view'),
+    path('billing/add/', views.billing_add, name='billing_add'), 
     path("update_cart_quantity/", views.update_cart_quantity, name="update_cart_quantity"),
+    path('billing_list/', views.billing_list, name='billing_list'),
 
     
     

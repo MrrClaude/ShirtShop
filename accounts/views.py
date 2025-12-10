@@ -287,6 +287,41 @@ def update_cart_quantity(request):
         'cart_total': total_price
     })
 
+def billing_add(request):
+    cart = request.session.get('cart', {})
+    total_price = sum(item['total'] for item in cart.values())
+
+    if request.method == "POST":
+        data = request.POST
+        qr_image = request.FILES.get('qr_code_image')
+
+        billing = BillingDetail(
+            first_name=data['first_name'],
+            last_name=data['last_name'],
+            country=data['country'],
+            address=data['address'],
+            town=data['town'],
+            postcode=data['postcode'],
+            phone=data['phone'],
+            email=data['email'],
+            qr_code_image=qr_image,
+            total=data['total']
+        )
+        billing.save()
+        return redirect('billing_list')
+    
+    return render(request, 'sports/checkout.html', {
+        'cart': cart,
+        'total_price': total_price,
+    })
+
+def billing_list(request):
+    billings = BillingDetail.objects.all()
+    return render(request, 'sports/BillingList.html', {'billings': billings})
+
+
+
+
 
 
 
