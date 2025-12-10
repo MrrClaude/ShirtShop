@@ -189,6 +189,7 @@ def add_to_cart(request, product_id):
     selected_size_id = request.GET.get('size')  
 
     product = Product.objects.get(id=product_id)
+    quantity = int(request.GET.get("qty", 1))  # Use the quantity from the page
     size_name = ''
 
     if selected_size_id:
@@ -214,20 +215,22 @@ def add_to_cart(request, product_id):
     cart = request.session.get('cart', {})
 
     if key in cart:
-        cart[key]['quantity'] += 1
+        # Add the selected quantity instead of always +1
+        cart[key]['quantity'] += quantity
         cart[key]['total'] = cart[key]['quantity'] * cart[key]['price']
     else:
         cart[key] = {
             'productName': product.productName,
             'size': size_name,
             'price': float(product.price),
-            'quantity': 1,
-            'total': float(product.price),
+            'quantity': quantity,  # Use selected quantity
+            'total': float(product.price) * quantity,  # Correct total
             'image': product.productImage.url if product.productImage else ''
         }
 
     request.session['cart'] = cart
     return redirect('view_cart')
+
 
 
 

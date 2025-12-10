@@ -195,9 +195,12 @@
 		    
 		});
 function addToCart(productId) {
-    const size = document.getElementById('size').value; // get selected size
-    window.location.href = `/add_to_cart/${productId}/?size=${size}`; // send via query string
+    const size = document.getElementById('size').value; // selected size
+    const qty = parseInt(document.getElementById('quantity').value); // get quantity from input
+    window.location.href = `/add_to_cart/${productId}/?size=${size}&qty=${qty}`; // send both
 }
+
+
 	</script>
 
 			</body>
